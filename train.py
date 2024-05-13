@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import json
+import re
 
 """
 
@@ -25,21 +27,28 @@ context embedding to one hot ish
 
 input_size = 100
 embedding_size = 10
-hidden_size = 10
 
+def onehot( x ):
+    res = np.zeros(embedding_size)
+    res[x] = 1
+    return res
 
 def relu( x ):
     return ( ( x > 0 ) + ( x < 0 ) * .01 ) * x
 def drelu( x ):
     return ( x > 0 ) + ( x < 0 ) * .01
+def softmax( x ):
+    return np.exp(x) / np.sum(np.exp(x))
+def dsoftmax( x ):
+    return softmax(x) * ( 1 - softmax(x) )
 act = relu
 dact = drelu
 
 def predict( t, e_c_prev, weights ):
-    w1, w2, w3 = weights
-    e_t = act( w1 @ t )
-    e_c = act( w2 @ np.concatenate( e_t, e_c_prev ) )
-    pred = act( w3 @ e_c )
+    w0, w1, w2 = weights
+    e_t = act( w0 @ t )
+    e_c = act( w1 @ np.concatenate(( e_t, e_c_prev )) )
+    pred = softmax( w2 @ e_c )
     return pred
 
 def loss( t, e_c_prev, weights, target ):
@@ -68,7 +77,7 @@ def dldw( t, e_c_prev, weights, target ):
     z_e_c = w2 @ np.concatenate( e_t, e_c_prev )
     e_c = act( z_e_c )
     z_pred = w3 @ e_c
-    pred = act( z_pred )
+    pred = softmax( z_pred )
 
     error_pred = 2 * ( pred - target ) * dact(z_out)
     error_e_c = w3.T @ error_pred * dact(z_e_c)
@@ -80,43 +89,51 @@ def dldw( t, e_c_prev, weights, target ):
 
     return dlossdw1, dlossdw2, dlossdw3
 
+np.random.seed(1)
+a = 0.005
+scale = .2
+
+w0 = np.random.rand( embedding_size, input_size ) - .5
+w1 = np.random.rand( embedding_size, embedding_size * 2 ) - .5
+w2 = np.random.rand( input_size, embedding_size ) - .5
+w0 *= scale
+w1 *= scale
+w2 *= scale
+weights = [ w0, w1, w2 ]
+
 # load dataset
 
-with np.load( "mnist.npz", allow_pickle=True ) as f:
-    x_train, y_train = f["x_train"], f["y_train"]
-    x_test, y_test = f["x_test"], f["y_test"]
+with open( "wordmap.json", mode="r" ) as f:
+    wordmap = json.load( f )
 
-# training set
+vocab_size = len(wordmap)
+x = []
 
-obss = x_train[:10000].reshape( 10000, 28*28 ) / 256
-targets = np.zeros((10000, 10))
-targets[np.arange(10000), y_train[:10000]] = 1
+with open( "sentences.txt", 'r' ) as f:
+    for line in f:
+        words = [
+            wordmap[word]
+            for word in re.findall(r"[\w']+|[.,!?;]", line)
+            if word and word in wordmap and wordmap[word] < vocab_size
+        ] + [ 0 ]
+        x.extend( [ (words[:i], elm) for i, elm in enumerate(words) ] )        
 
-# test set
+# train and test set
 
-obss_test = x_test[:1000].reshape( 1000, 28*28 ) / 256
-targets_test = np.zeros((1000, 10))
-targets_test[np.arange(1000), y_test[:1000]] = 1
-
-# init network
-
-np.random.seed(1)
-w1 = np.random.rand(40, 28*28) - .5
-w2 = np.random.rand(10, 40) - .5
-w1 *= .2
-w2 *= .2
-weights = [ w1, w2 ]
-a = 0.005
+training_data = x[:len(x) // 10 * 9]
+test_data = x[len(x) // 10 * 9:]
 
 # training loop
 
 try:
     for epoch in range(11):
-        for i, obs in enumerate(obss):
-            target = targets[i]
-            dw1, dw2 = dldw( obs, weights, target )
-            weights[0] -= a * dw1
-            weights[1] -= a * dw2
+        for past_tokens, next_token in training_data:
+            e_c_prev = np.zeros(embedding_size)            
+            t = onehot(past_tokens[-1])
+
+            dw0, dw1, dw2 = dldw( obs, weights, target )
+            weights[0] -= a * dw0
+            weights[1] -= a * dw1
         print(
             "epoch", epoch,
             "- test accuracy", f"{test_eval( obss_test, weights, targets_test ) * 100:.1f}%"
@@ -127,9 +144,9 @@ except KeyboardInterrupt:
 
 # save the weights to a file
 
-np.savez( "weights.npz", w1=weights[0], w2=weights[1] )
+np.savez( "weights.npz", w0=weights[0], w1=weights[1], w2=weights[2] )
 
 # to load the weights
 
 with np.load( "weights.npz", allow_pickle=True ) as f:
-    weights = [ f["w1"], f["w2"] ]
+    weights = [ f["w0"], f["w1"], f["w2"] ]
