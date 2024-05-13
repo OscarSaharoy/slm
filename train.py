@@ -32,16 +32,8 @@ def relu( x ):
     return ( ( x > 0 ) + ( x < 0 ) * .01 ) * x
 def drelu( x ):
     return ( x > 0 ) + ( x < 0 ) * .01
-def sigmoid( x ):
-    return 1 / ( 1 + np.exp(-x) )
-def dsigmoid( x ):
-    return sigmoid(x) * ( 1 - sigmoid(x) )
 act = relu
 dact = drelu
-"""
-act = sigmoid
-dact = dsigmoid
-"""
 
 def predict( t, e_c_prev, weights ):
     w1, w2, w3 = weights
@@ -63,21 +55,30 @@ def test_eval( t, e_c_prev, weights, targets ):
         for t, target in zip(obss, targets)
     ) / targets.shape[0]
 
-def dldw( obs, weights, target ):
-    w1, w2 = weights
+def dldw( t, e_c_prev, weights, target ):
+    w1, w2, w3 = weights
 
     z_hid = w1 @ obs
     hid = act( z_hid )
     z_out = w2 @ hid
     pred = act( z_out )
 
+    z_e_t = w1 @ t
+    e_t = act( z_e_t )
+    z_e_c = w2 @ np.concatenate( e_t, e_c_prev )
+    e_c = act( z_e_c )
+    z_pred = w3 @ e_c
+    pred = act( z_pred )
+
     error_pred = 2 * ( pred - target ) * dact(z_out)
-    error_hid = w2.T @ error_pred * dact(z_hid)
+    error_e_c = w3.T @ error_pred * dact(z_e_c)
+    error_e_t = w2.T @ error_e_c * dact(z_e_t)
 
-    dlossdw2 = np.outer( error_pred, hid )
-    dlossdw1 = np.outer( error_hid, obs )
+    dlossdw3 = np.outer( error_pred, e_c )
+    dlossdw2 = np.outer( error_e_c, e_t )
+    dlossdw1 = np.outer( error_e_t, t )
 
-    return dlossdw1, dlossdw2
+    return dlossdw1, dlossdw2, dlossdw3
 
 # load dataset
 
