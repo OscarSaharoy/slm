@@ -39,8 +39,6 @@ def drelu( x ):
     return ( x > 0 ) + ( x < 0 ) * .01
 def softmax( x ):
     return np.exp(x) / np.sum(np.exp(x))
-def dsoftmax( x ):
-    return softmax(x) * ( 1 - softmax(x) )
 act = relu
 dact = drelu
 
@@ -67,11 +65,6 @@ def test_eval( t, e_c_prev, weights, targets ):
 def dldw( t, e_c_prev, weights, target ):
     w1, w2, w3 = weights
 
-    z_hid = w1 @ obs
-    hid = act( z_hid )
-    z_out = w2 @ hid
-    pred = act( z_out )
-
     z_e_t = w1 @ t
     e_t = act( z_e_t )
     z_e_c = w2 @ np.concatenate( e_t, e_c_prev )
@@ -79,7 +72,7 @@ def dldw( t, e_c_prev, weights, target ):
     z_pred = w3 @ e_c
     pred = softmax( z_pred )
 
-    error_pred = 2 * ( pred - target ) * dact(z_out)
+    error_pred = 2 * ( pred - target ) * pred * ( 1 - pred )
     error_e_c = w3.T @ error_pred * dact(z_e_c)
     error_e_t = w2.T @ error_e_c * dact(z_e_t)
 
