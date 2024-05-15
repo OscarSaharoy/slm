@@ -1,21 +1,12 @@
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
-i am dog and cat is small
+i am happy.
+my dog is big.
+cat was small.
+i am nice.
+my dog is happy.
+cat was big.
+i am small.
+my cat is nice.
+dog was happy.
+i am big.
+my cat is small.
+dog was nice.

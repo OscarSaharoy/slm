@@ -139,22 +139,23 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     return dlossdw1, dlossdw2, dlossdw3, error_e_c_prev
 
 def write( weights ):
+    gen = np.random.default_rng()
     sentence = []
     e_c_prev = np.zeros(embedding_size)
     t = onehot(0)
 
     while (len(sentence) == 0 or sentence[-1] != "") and len(sentence) < 100:
         pred, e_c_prev = predict( t, e_c_prev, weights )
-        word = mapword[ np.argmax(pred) ]
+        word = mapword[ gen.choice(input_size, p=pred) ]
         sentence.append(word)
-        t = onehot( np.argmax(pred) )
+        t = onehot( wordmap[word] )
 
-    print(sentence)
+    print(" ".join(sentence).replace(" .", "."))
 
 # init network
 
 np.random.seed(0)
-a = 0.1
+a = 0.05
 scale = .2
 
 w0 = np.random.rand( embedding_size, input_size ) - .5
@@ -170,6 +171,7 @@ weights = [ w0, w1, w2 ]
 try:
     for epoch in range(1100):
         for past_tokens, next_token in training_data:
+            state_stack = []
             e_c_prev = np.zeros(embedding_size)
             for past_token in past_tokens[:-1]:
                 t = onehot(past_token)
@@ -187,9 +189,11 @@ try:
         )
 
 except KeyboardInterrupt:
-    print("ending training!")
+    print("\nending training")
 
-write( weights )
+print( sum(w.size for w in weights), "parameters" )
+for _ in range(20):
+    write( weights )
 
 # save the weights to a file
 
