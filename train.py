@@ -127,8 +127,6 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     z_e_c = w2 @ np.concatenate(( e_t, e_c_prev ))
     e_c = act( z_e_c )
 
-    error_pred = 2 * ( pred - tt ) * pred * ( 1 - pred )
-    error_e_c = w3.T @ error_pred * dact(z_e_c)
     error_e_t = ( w2.T @ error_e_c )[:embedding_size] * dact(z_e_t)
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
@@ -175,14 +173,26 @@ try:
             e_c_prev = np.zeros(embedding_size)
             for past_token in past_tokens[:-1]:
                 t = onehot(past_token)
+                state_stack.append(( t, e_c_prev ))
                 _, e_c_prev = predict( t, e_c_prev, weights )
             t = onehot(past_tokens[-1])
             tt = onehot(next_token)
 
-            dw0, dw1, dw2, _ = dldwf( t, e_c_prev, weights, tt )
+            dw0, dw1, dw2, error_e_c_prev = dldwf( t, e_c_prev, weights, tt )
             weights[0] -= a * dw0
             weights[1] -= a * dw1
             weights[2] -= a * dw2
+
+            while len(state_stack):
+                t, e_c_prev = state_stack.pop()
+
+                dw0, dw1, dw2, error_e_c_prev = dldwi(
+                    t, e_c_prev, weights, error_e_c_prev
+                )
+                weights[0] -= a * dw0
+                weights[1] -= a * dw1
+                weights[2] -= a * dw2
+
         print(
             "epoch", epoch,
             "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
