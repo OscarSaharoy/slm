@@ -164,6 +164,8 @@ w1 *= scale
 w2 *= scale
 weights = [ w0, w1, w2 ]
 
+print( sum(w.size for w in weights), "parameters" )
+
 # training loop
 
 try:

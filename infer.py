@@ -3,6 +3,7 @@
 import numpy as np
 import json
 import sys
+import re
 
 # load dataset
 
@@ -69,13 +70,13 @@ def write( weights ):
 def complete( prompt, weights ):
     words = [ 0 ] + [
         wordmap[word]
-        for word in re.findall(r"[\w']+|[.,!?;]", line)
+        for word in re.findall(r"[\w']+|[.,!?;]", prompt)
         if word and word in wordmap and wordmap[word] < vocab_size
     ]
 
     e_c_prev = np.zeros(embedding_size)
     for word in words[:-1]:
-        t = onehot(past_token)
+        t = onehot(word)
         _, e_c_prev = predict( t, e_c_prev, weights )
     t = onehot( words[-1] )
 
@@ -88,17 +89,15 @@ def complete( prompt, weights ):
         sentence.append(word)
         t = onehot( wordmap[word] )
 
-    print(" ".join(sentence).replace(" .", "."))
+    return " ".join(sentence).replace(" .", ".")
 
 # load the weights
 
 with np.load( "weights.npz", allow_pickle=True ) as f:
     weights = [ f["w0"], f["w1"], f["w2"] ]
 
-
-print( sum(w.size for w in weights), "parameters" )
-for _ in range(20):
-    write( weights )
-
 if len( sys.argv ) > 1:
     print( complete( sys.argv[1], weights ) )
+else:
+    for _ in range(20):
+        write( weights )
