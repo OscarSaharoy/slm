@@ -152,67 +152,72 @@ def write( weights ):
 
 # init network
 
-np.random.seed(0)
-a = 0.05
-scale = .2
+def train():
 
-w0 = np.random.rand( embedding_size, input_size ) - .5
-w1 = np.random.rand( embedding_size, embedding_size * 2 ) - .5
-w2 = np.random.rand( input_size, embedding_size ) - .5
-w0 *= scale
-w1 *= scale
-w2 *= scale
-weights = [ w0, w1, w2 ]
+    np.random.seed(0)
+    a = 0.05
+    scale = .2
 
-print( sum(w.size for w in weights), "parameters" )
+    w0 = np.random.rand( embedding_size, input_size ) - .5
+    w1 = np.random.rand( embedding_size, embedding_size * 2 ) - .5
+    w2 = np.random.rand( input_size, embedding_size ) - .5
+    w0 *= scale
+    w1 *= scale
+    w2 *= scale
+    weights = [ w0, w1, w2 ]
 
-# training loop
+    print( sum(w.size for w in weights), "parameters" )
 
-try:
-    for epoch in range(1100):
-        for past_tokens, next_token in training_data:
-            state_stack = []
-            e_c_prev = np.zeros(embedding_size)
-            for past_token in past_tokens[:-1]:
-                t = onehot(past_token)
-                state_stack.append(( t, e_c_prev ))
-                _, e_c_prev = predict( t, e_c_prev, weights )
-            t = onehot(past_tokens[-1])
-            tt = onehot(next_token)
+    # training loop
 
-            dw0, dw1, dw2, error_e_c_prev = dldwf( t, e_c_prev, weights, tt )
-            weights[0] -= a * dw0
-            weights[1] -= a * dw1
-            weights[2] -= a * dw2
+    try:
+        for epoch in range(1100):
+            for past_tokens, next_token in training_data:
+                state_stack = []
+                e_c_prev = np.zeros(embedding_size)
+                for past_token in past_tokens[:-1]:
+                    t = onehot(past_token)
+                    state_stack.append(( t, e_c_prev ))
+                    _, e_c_prev = predict( t, e_c_prev, weights )
+                t = onehot(past_tokens[-1])
+                tt = onehot(next_token)
 
-            while len(state_stack):
-                t, e_c_prev = state_stack.pop()
-
-                dw0, dw1, dw2, error_e_c_prev = dldwi(
-                    t, e_c_prev, weights, error_e_c_prev
-                )
+                dw0, dw1, dw2, error_e_c_prev = dldwf( t, e_c_prev, weights, tt )
                 weights[0] -= a * dw0
                 weights[1] -= a * dw1
                 weights[2] -= a * dw2
 
-        if epoch % 20 == 0:
-            print(
-                "epoch", epoch,
-                "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
-            )
+                while len(state_stack):
+                    t, e_c_prev = state_stack.pop()
 
-except KeyboardInterrupt:
-    print("\nending training")
+                    dw0, dw1, dw2, error_e_c_prev = dldwi(
+                        t, e_c_prev, weights, error_e_c_prev
+                    )
+                    weights[0] -= a * dw0
+                    weights[1] -= a * dw1
+                    weights[2] -= a * dw2
 
-print( sum(w.size for w in weights), "parameters" )
-for _ in range(20):
-    write( weights )
+            if epoch % 20 == 0:
+                print(
+                    "epoch", epoch,
+                    "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
+                )
 
-# save the weights to a file
+    except KeyboardInterrupt:
+        print("\nending training")
 
-np.savez( "weights.npz", w0=weights[0], w1=weights[1], w2=weights[2] )
+    print( sum(w.size for w in weights), "parameters" )
+    for _ in range(20):
+        write( weights )
 
-# to load the weights
+    # save the weights to a file
 
-with np.load( "weights.npz", allow_pickle=True ) as f:
-    weights = [ f["w0"], f["w1"], f["w2"] ]
+    np.savez( "weights.npz", w0=weights[0], w1=weights[1], w2=weights[2] )
+
+    # to load the weights
+
+    with np.load( "weights.npz", allow_pickle=True ) as f:
+        weights = [ f["w0"], f["w1"], f["w2"] ]
+
+if __name__ == "__main__":
+    train()

@@ -5,67 +5,9 @@ import json
 import sys
 import re
 
-# load dataset
+from train import input_size, embedding_size, vocab_size
+from train import wordmap, mapword, act, softmax, predict, write, onehot
 
-with open( "wordmap.json", mode="r" ) as f:
-    wordmap = json.load( f )
-
-mapword = { v: k for k, v in wordmap.items() }
-vocab_size = len(wordmap)
-
-def relu( x ):
-    return ( ( x > 0 ) + ( x < 0 ) * .01 ) * x
-act = relu
-
-
-# load wordmap
-
-with open( "wordmap.json", mode="r" ) as f:
-    wordmap = json.load( f )
-
-input_size = 16
-embedding_size = 10
-
-# funcs
-
-def onehot( x ):
-    res = np.zeros(input_size)
-    res[x] = 1
-    return res
-
-def relu( x ):
-    return ( ( x > 0 ) + ( x < 0 ) * .01 ) * x
-def drelu( x ):
-    return ( x > 0 ) + ( x < 0 ) * .01
-def sigmoid( x ):
-    return 1 / ( 1 + np.exp(-x) )
-def dsigmoid( x ):
-    return sigmoid(x) * ( 1 - sigmoid(x) )
-def softmax( x ):
-    return np.exp(x) / np.sum(np.exp(x))
-act = relu
-dact = drelu
-
-def predict( t, e_c_prev, weights ):
-    w0, w1, w2 = weights
-    e_t = act( w0 @ t )
-    e_c = act( w1 @ np.concatenate(( e_t, e_c_prev )) )
-    pred = softmax( w2 @ e_c )
-    return pred, e_c
-
-def write( weights ):
-    gen = np.random.default_rng()
-    sentence = []
-    e_c_prev = np.zeros(embedding_size)
-    t = onehot(0)
-
-    while (len(sentence) == 0 or sentence[-1] != "") and len(sentence) < 100:
-        pred, e_c_prev = predict( t, e_c_prev, weights )
-        word = mapword[ gen.choice(input_size, p=pred) ]
-        sentence.append(word)
-        t = onehot( wordmap[word] )
-
-    print(" ".join(sentence).replace(" .", "."))
 
 def complete( prompt, weights ):
     words = [ 0 ] + [
