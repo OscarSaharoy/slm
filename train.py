@@ -37,12 +37,12 @@ x = []
 
 with open( "sentences.txt", 'r' ) as f:
     for line in f:
-        words = [
+        words = [ 0 ] + [
             wordmap[word]
             for word in re.findall(r"[\w']+|[.,!?;]", line)
             if word and word in wordmap and wordmap[word] < vocab_size
         ] + [ 0 ]
-        x.extend( [ ([0] + words[:i], elm) for i, elm in enumerate(words) ] )
+        x.append(words)
 
 # train and test set
 
@@ -88,15 +88,14 @@ def check( t, e_c_prev, weights, tt ):
 
 def test_eval( test_data, weights ):
     res = 0
-    for past_tokens, next_token in test_data:
+    for tokens in test_data:
         e_c_prev = np.zeros(embedding_size)
-        for past_token in past_tokens[:-1]:
-            t = onehot(past_token)
-            _, e_c_prev = predict( t, e_c_prev, weights )
-        t = onehot(past_tokens[-1])
-        tt = onehot(next_token)
-        res += check( t, e_c_prev, weights, tt )
-    return res / len( test_data )
+        for i, _ in enumerate( tokens[:-1] ):
+            t = onehot( tokens[i] )
+            tt = onehot( tokens[i+1] )
+            pred, e_c_prev = predict( t, e_c_prev, weights )
+            res += np.argmax( pred ) == np.argmax( tt )
+    return res / sum( len(x) for x in test_data )
 
 def dldwf( t, e_c_prev, weights, tt ):
     w1, w2, w3 = weights
@@ -117,7 +116,7 @@ def dldwf( t, e_c_prev, weights, tt ):
     dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) )
     dlossdw1 = np.outer( error_e_t, t )
 
-    return dlossdw1, dlossdw2, dlossdw3, error_e_c_prev
+    return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
 def dldwi( t, e_c_prev, weights, error_e_c ):
     w1, w2, w3 = weights
@@ -134,7 +133,7 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) )
     dlossdw1 = np.outer( error_e_t, t )
 
-    return dlossdw1, dlossdw2, dlossdw3, error_e_c_prev
+    return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
 def write( weights ):
     gen = np.random.default_rng()
@@ -153,7 +152,6 @@ def write( weights ):
 # init network
 
 def train():
-
     np.random.seed(0)
     a = 0.05
     scale = .2
@@ -172,30 +170,25 @@ def train():
 
     try:
         for epoch in range(1100):
-            for past_tokens, next_token in training_data:
+            for tokens in training_data:
                 state_stack = []
                 e_c_prev = np.zeros(embedding_size)
-                for past_token in past_tokens[:-1]:
-                    t = onehot(past_token)
+                for i, _ in enumerate( tokens[:-1] ):
+                    t = onehot(tokens[i])
+                    tt = onehot(tokens[i+1])
                     state_stack.append(( t, e_c_prev ))
-                    _, e_c_prev = predict( t, e_c_prev, weights )
-                t = onehot(past_tokens[-1])
-                tt = onehot(next_token)
-
-                dw0, dw1, dw2, error_e_c_prev = dldwf( t, e_c_prev, weights, tt )
-                weights[0] -= a * dw0
-                weights[1] -= a * dw1
-                weights[2] -= a * dw2
-
-                while len(state_stack):
-                    t, e_c_prev = state_stack.pop()
-
-                    dw0, dw1, dw2, error_e_c_prev = dldwi(
-                        t, e_c_prev, weights, error_e_c_prev
-                    )
+                    dw0, dw1, dw2, e_c_prev, error_e_c_prev = \
+                        dldwf( t, e_c_prev, weights, tt )
                     weights[0] -= a * dw0
                     weights[1] -= a * dw1
                     weights[2] -= a * dw2
+
+                    for t_p, e_c_prev_p in state_stack[::-1]:
+                        dw0, dw1, dw2, _, error_e_c_prev = \
+                            dldwi( t_p, e_c_prev_p, weights, error_e_c_prev )
+                        weights[0] -= a * dw0
+                        weights[1] -= a * dw1
+                        weights[2] -= a * dw2
 
             if epoch % 20 == 0:
                 print(
