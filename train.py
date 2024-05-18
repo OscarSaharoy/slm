@@ -195,10 +195,11 @@ try:
                 weights[1] -= a * dw1
                 weights[2] -= a * dw2
 
-        print(
-            "epoch", epoch,
-            "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
-        )
+        if epoch % 20 == 0:
+            print(
+                "epoch", epoch,
+                "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
+            )
 
 except KeyboardInterrupt:
     print("\nending training")
