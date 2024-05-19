@@ -55,6 +55,7 @@ a = 0.05
 scale = .2
 epochs = 1000
 l2 = 0.000
+norml = 0.05
 
 # funcs
 
@@ -117,9 +118,16 @@ def dldwf( t, e_c_prev, weights, tt ):
     error_e_t = ( w2.T @ error_e_c )[:embedding_size] * dact(z_e_t)
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
-    dlossdw3 = np.outer( error_pred, e_c ) - l2 * 2 * w3
-    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) - l2 * 2 * w2
-    dlossdw1 = np.outer( error_e_t, t ) - l2 * 2 * w1
+    dlossdw3 = np.outer( error_pred, e_c ) + l2 * 2 * w3
+    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) + l2 * 2 * w2
+    dlossdw1 = np.outer( error_e_t, t ) + l2 * 2 * w1
+
+    dlossdw3 = dlossdw3 if np.linalg.norm(dlossdw3) < norml \
+        else dlossdw3 / np.linalg.norm(dlossdw3) * norml
+    dlossdw2 = dlossdw2 if np.linalg.norm(dlossdw2) < norml \
+        else dlossdw2 / np.linalg.norm(dlossdw2) * norml
+    dlossdw1 = dlossdw1 if np.linalg.norm(dlossdw1) < norml \
+        else dlossdw1 / np.linalg.norm(dlossdw1) * norml
 
     return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
@@ -135,8 +143,15 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
     dlossdw3 = 0
-    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) - l2 * 2 * w2
-    dlossdw1 = np.outer( error_e_t, t ) - l2 * 2 * w1
+    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) + l2 * 2 * w2
+    dlossdw1 = np.outer( error_e_t, t ) + l2 * 2 * w1
+
+    dlossdw3 = dlossdw3 if np.linalg.norm(dlossdw3) < norml \
+        else dlossdw3 / np.linalg.norm(dlossdw3) * norml
+    dlossdw2 = dlossdw2 if np.linalg.norm(dlossdw2) < norml \
+        else dlossdw2 / np.linalg.norm(dlossdw2) * norml
+    dlossdw1 = dlossdw1 if np.linalg.norm(dlossdw1) < norml \
+        else dlossdw1 / np.linalg.norm(dlossdw1) * norml
 
     return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
