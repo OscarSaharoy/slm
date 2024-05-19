@@ -1,12 +1,72 @@
 i am happy.
-my dog is big.
-cat was small.
-i am nice.
+my cat is happy.
 my dog is happy.
-cat was big.
-i am small.
+i am nice.
 my cat is nice.
-dog was happy.
+my dog is nice.
 i am big.
+my cat is big.
+my dog is big.
+i am small.
 my cat is small.
-dog was nice.
+my dog is small.
+i am happy.
+my cat is happy.
+my dog is happy.
+i am nice.
+my cat is nice.
+my dog is nice.
+i am big.
+my cat is big.
+my dog is big.
+i am small.
+my cat is small.
+my dog is small.
+i am happy.
+my cat is happy.
+my dog is happy.
+i am nice.
+my cat is nice.
+my dog is nice.
+i am big.
+my cat is big.
+my dog is big.
+i am small.
+my cat is small.
+my dog is small.
+i am happy.
+my cat is happy.
+my dog is happy.
+i am nice.
+my cat is nice.
+my dog is nice.
+i am big.
+my cat is big.
+my dog is big.
+i am small.
+my cat is small.
+my dog is small.
+i am happy.
+my cat is happy.
+my dog is happy.
+i am nice.
+my cat is nice.
+my dog is nice.
+i am big.
+my cat is big.
+my dog is big.
+i am small.
+my cat is small.
+my dog is small.
+i am happy.
+my cat is happy.
+my dog is happy.
+i am nice.
+my cat is nice.
+my dog is nice.
+i am big.
+my cat is big.
+my dog is big.
+i am small.
+my cat is small.
+my dog is small.

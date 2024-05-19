@@ -49,7 +49,7 @@ with open( "sentences.txt", 'r' ) as f:
 training_data = x[:len(x) // 10 * 9]
 test_data = x[len(x) // 10 * 9:]
 
-input_size = 16
+input_size = 21
 embedding_size = 10
 a = 0.05
 scale = .2
