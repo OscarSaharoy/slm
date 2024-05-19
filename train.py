@@ -51,6 +51,10 @@ test_data = x[len(x) // 10 * 9:]
 
 input_size = 16
 embedding_size = 10
+a = 0.05
+scale = .2
+epochs = 1000
+l2 = 0.000
 
 # funcs
 
@@ -68,7 +72,8 @@ def sigmoid( x ):
 def dsigmoid( x ):
     return sigmoid(x) * ( 1 - sigmoid(x) )
 def softmax( x ):
-    return np.exp(x) / np.sum(np.exp(x))
+    cx = x - max(x)
+    return np.exp(cx) / np.sum(np.exp(cx))
 act = relu
 dact = drelu
 
@@ -112,9 +117,9 @@ def dldwf( t, e_c_prev, weights, tt ):
     error_e_t = ( w2.T @ error_e_c )[:embedding_size] * dact(z_e_t)
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
-    dlossdw3 = np.outer( error_pred, e_c )
-    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) )
-    dlossdw1 = np.outer( error_e_t, t )
+    dlossdw3 = np.outer( error_pred, e_c ) - l2 * 2 * w3
+    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) - l2 * 2 * w2
+    dlossdw1 = np.outer( error_e_t, t ) - l2 * 2 * w1
 
     return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
@@ -130,8 +135,8 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
     dlossdw3 = 0
-    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) )
-    dlossdw1 = np.outer( error_e_t, t )
+    dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) - l2 * 2 * w2
+    dlossdw1 = np.outer( error_e_t, t ) - l2 * 2 * w1
 
     return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
@@ -153,9 +158,6 @@ def write( weights ):
 
 def train():
     np.random.seed(0)
-    a = 0.05
-    scale = .2
-
     w0 = np.random.rand( embedding_size, input_size ) - .5
     w1 = np.random.rand( embedding_size, embedding_size * 2 ) - .5
     w2 = np.random.rand( input_size, embedding_size ) - .5
@@ -169,7 +171,7 @@ def train():
     # training loop
 
     try:
-        for epoch in range(1100):
+        for epoch in range(epochs):
             for tokens in training_data:
                 state_stack = []
                 e_c_prev = np.zeros(embedding_size)
