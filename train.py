@@ -37,6 +37,9 @@ x = []
 
 with open( "sentences.txt", 'r' ) as f:
     for line in f:
+        warns = [ w for w in re.findall(r"[\w']+|[.,!?;]", line) if w not in wordmap ]
+        if warns:
+            print( "warning: words not in vocabulary", warns )
         words = [ 0 ] + [
             wordmap[word]
             for word in re.findall(r"[\w']+|[.,!?;]", line)
@@ -46,17 +49,18 @@ with open( "sentences.txt", 'r' ) as f:
 
 # train and test set
 
-training_data = x[:len(x) // 10 * 9]
-test_data = x[len(x) // 10 * 9:]
+training_data = x[:int(len(x) / 10 * 9)]
+test_data = x[int(len(x) / 10 * 9):]
 
 # hyperparameters
 
-input_size = 21
+input_size = 25
 embedding_size = 10
 a = 0.05
 scale = .2
 epochs = 1000
 l2 = 0.000
+stepl = 0.001
 
 # funcs
 
@@ -78,6 +82,12 @@ def softmax( x ):
     return np.exp(cx) / np.sum(np.exp(cx))
 act = relu
 dact = drelu
+
+def limit( x ):
+    return (
+        x if np.linalg.norm(x) < stepl * x.size ** .5
+        else x / np.linalg.norm(x) * stepl * x.size ** .5
+    )
 
 def predict( t, e_c_prev, weights ):
     w0, w1, w2 = weights
@@ -123,6 +133,10 @@ def dldwf( t, e_c_prev, weights, tt ):
     dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) + l2 * 2 * w2
     dlossdw1 = np.outer( error_e_t, t ) + l2 * 2 * w1
 
+    dlossdw3 = limit(dlossdw3)
+    dlossdw2 = limit(dlossdw2)
+    dlossdw1 = limit(dlossdw1)
+
     return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
 def dldwi( t, e_c_prev, weights, error_e_c ):
@@ -139,6 +153,9 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     dlossdw3 = 0
     dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) + l2 * 2 * w2
     dlossdw1 = np.outer( error_e_t, t ) + l2 * 2 * w1
+
+    dlossdw2 = limit(dlossdw2)
+    dlossdw1 = limit(dlossdw1)
 
     return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
 
@@ -174,6 +191,7 @@ def train():
 
     try:
         for epoch in range(epochs):
+            m = 0
             for tokens in training_data:
                 state_stack = []
                 e_c_prev = np.zeros(embedding_size)
@@ -186,6 +204,7 @@ def train():
                     weights[0] -= a * dw0
                     weights[1] -= a * dw1
                     weights[2] -= a * dw2
+                    m = max( m, *(np.linalg.norm(x) for x in (dw0, dw1, dw2)) )
 
                     for t_p, e_c_prev_p in state_stack[::-1]:
                         dw0, dw1, dw2, _, error_e_c_prev = \
@@ -193,13 +212,16 @@ def train():
                         weights[0] -= a * dw0
                         weights[1] -= a * dw1
                         weights[2] -= a * dw2
+                        m = max( m, *(np.linalg.norm(x) for x in (dw0, dw1, dw2)) )
                     state_stack.append(c)
 
-            if epoch % 20 == 0:
+            if epoch % 1 == 0:
                 print(
                     "epoch", epoch,
                     "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
                 )
+                print( "max weight step", m )
+                print( "avg weights", np.mean(weights[0] * weights[0]) ** .5 , "\n")
 
     except KeyboardInterrupt:
         print("\nending training")
