@@ -180,7 +180,7 @@ def train():
                 for i, _ in enumerate( tokens[:-1] ):
                     t = onehot(tokens[i])
                     tt = onehot(tokens[i+1])
-                    state_stack.append(( t, e_c_prev ))
+                    c = ( t, e_c_prev )
                     dw0, dw1, dw2, e_c_prev, error_e_c_prev = \
                         dldwf( t, e_c_prev, weights, tt )
                     weights[0] -= a * dw0
@@ -193,6 +193,7 @@ def train():
                         weights[0] -= a * dw0
                         weights[1] -= a * dw1
                         weights[2] -= a * dw2
+                    state_stack.append(c)
 
             if epoch % 20 == 0:
                 print(
