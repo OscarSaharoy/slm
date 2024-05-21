@@ -80,8 +80,8 @@ def dsigmoid( x ):
 def softmax( x ):
     cx = x - max(x)
     return np.exp(cx) / np.sum(np.exp(cx))
-act = relu
-dact = drelu
+act = np.tanh
+dact = lambda x : 1 - np.tanh(x*x)
 
 def limit( x ):
     return (
