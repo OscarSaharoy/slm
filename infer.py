@@ -36,7 +36,7 @@ def complete( prompt, weights ):
 # load the weights
 
 with np.load( "weights.npz", allow_pickle=True ) as f:
-    weights = [ f["w0"], f["w1"], f["w2"] ]
+    weights = [ f["w0"], f["w1"], f["w2"], f["w3"] ]
 
 if len( sys.argv ) > 1:
     print( complete( sys.argv[1], weights ) )

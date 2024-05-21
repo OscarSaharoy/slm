@@ -56,11 +56,11 @@ test_data = x[int(len(x) / 10 * 9):]
 
 input_size = 25
 embedding_size = 10
-a = 0.05
+a = 0.01
 scale = .2
 epochs = 1000
 l2 = 0.000
-stepl = 0.001
+stepl = 0.01
 
 # funcs
 
@@ -90,10 +90,11 @@ def limit( x ):
     )
 
 def predict( t, e_c_prev, weights ):
-    w0, w1, w2 = weights
+    w0, w1, w2, w3 = weights
     e_t = act( w0 @ t )
     e_c = act( w1 @ np.concatenate(( e_t, e_c_prev )) )
-    pred = softmax( w2 @ e_c )
+    e_n = act( w2 @ e_c )
+    pred = softmax( w3 @ e_n )
     return pred, e_c
 
 def loss( t, e_c_prev, weights, tt ):
@@ -115,32 +116,37 @@ def test_eval( test_data, weights ):
     return res / sum( len(x) for x in test_data )
 
 def dldwf( t, e_c_prev, weights, tt ):
-    w1, w2, w3 = weights
+    w1, w2, w3, w4 = weights
 
     z_e_t = w1 @ t
     e_t = act( z_e_t )
     z_e_c = w2 @ np.concatenate(( e_t, e_c_prev ))
     e_c = act( z_e_c )
-    z_pred = w3 @ e_c
+    z_e_n = w3 @ e_c
+    e_n = act( z_e_n )
+    z_pred = w4 @ e_n
     pred = softmax( z_pred )
 
     error_pred = 2 * ( pred - tt ) * pred * ( 1 - pred )
-    error_e_c = w3.T @ error_pred * dact(z_e_c)
+    error_e_n = w4.T @ error_pred * dact(z_e_n)
+    error_e_c = w3.T @ error_e_n * dact(z_e_c)
     error_e_t = ( w2.T @ error_e_c )[:embedding_size] * dact(z_e_t)
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
-    dlossdw3 = np.outer( error_pred, e_c ) + l2 * 2 * w3
+    dlossdw4 = np.outer( error_pred, e_n ) + l2 * 2 * w4
+    dlossdw3 = np.outer( error_e_n, e_c ) + l2 * 2 * w3
     dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) + l2 * 2 * w2
     dlossdw1 = np.outer( error_e_t, t ) + l2 * 2 * w1
 
+    dlossdw4 = limit(dlossdw4)
     dlossdw3 = limit(dlossdw3)
     dlossdw2 = limit(dlossdw2)
     dlossdw1 = limit(dlossdw1)
 
-    return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
+    return dlossdw1, dlossdw2, dlossdw3, dlossdw4, e_c, error_e_c_prev
 
 def dldwi( t, e_c_prev, weights, error_e_c ):
-    w1, w2, w3 = weights
+    w1, w2, w3, w4 = weights
 
     z_e_t = w1 @ t
     e_t = act( z_e_t )
@@ -150,6 +156,7 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     error_e_t = ( w2.T @ error_e_c )[:embedding_size] * dact(z_e_t)
     error_e_c_prev = ( w2.T @ error_e_c )[embedding_size:] * dact(e_c_prev)
 
+    dlossdw4 = 0
     dlossdw3 = 0
     dlossdw2 = np.outer( error_e_c, np.concatenate(( e_t, e_c_prev )) ) + l2 * 2 * w2
     dlossdw1 = np.outer( error_e_t, t ) + l2 * 2 * w1
@@ -157,7 +164,7 @@ def dldwi( t, e_c_prev, weights, error_e_c ):
     dlossdw2 = limit(dlossdw2)
     dlossdw1 = limit(dlossdw1)
 
-    return dlossdw1, dlossdw2, dlossdw3, e_c, error_e_c_prev
+    return dlossdw1, dlossdw2, dlossdw3, dlossdw4, e_c, error_e_c_prev
 
 def write( weights ):
     gen = np.random.default_rng()
@@ -179,11 +186,16 @@ def train():
     np.random.seed(0)
     w0 = np.random.rand( embedding_size, input_size ) - .5
     w1 = np.random.rand( embedding_size, embedding_size * 2 ) - .5
-    w2 = np.random.rand( input_size, embedding_size ) - .5
+    w2 = np.random.rand( embedding_size, embedding_size ) - .5
+    w3 = np.random.rand( input_size, embedding_size ) - .5
     w0 *= scale
     w1 *= scale
     w2 *= scale
-    weights = [ w0, w1, w2 ]
+    w3 *= scale
+    w1[:, :embedding_size] += np.eye(embedding_size)
+    w1[:, embedding_size:] += np.eye(embedding_size)
+    w2 += np.eye(embedding_size)
+    weights = [ w0, w1, w2, w3 ]
 
     print( sum(w.size for w in weights), "parameters" )
 
@@ -199,19 +211,21 @@ def train():
                     t = onehot(tokens[i])
                     tt = onehot(tokens[i+1])
                     c = ( t, e_c_prev )
-                    dw0, dw1, dw2, e_c_prev, error_e_c_prev = \
+                    dw0, dw1, dw2, dw3, e_c_prev, error_e_c_prev = \
                         dldwf( t, e_c_prev, weights, tt )
                     weights[0] -= a * dw0
                     weights[1] -= a * dw1
                     weights[2] -= a * dw2
+                    weights[3] -= a * dw3
                     m = max( m, *(np.linalg.norm(x) for x in (dw0, dw1, dw2)) )
 
                     for t_p, e_c_prev_p in state_stack[::-1]:
-                        dw0, dw1, dw2, _, error_e_c_prev = \
+                        dw0, dw1, dw2, dw3, _, error_e_c_prev = \
                             dldwi( t_p, e_c_prev_p, weights, error_e_c_prev )
                         weights[0] -= a * dw0
                         weights[1] -= a * dw1
                         weights[2] -= a * dw2
+                        weights[3] -= a * dw3
                         m = max( m, *(np.linalg.norm(x) for x in (dw0, dw1, dw2)) )
                     state_stack.append(c)
 
@@ -232,12 +246,12 @@ def train():
 
     # save the weights to a file
 
-    np.savez( "weights.npz", w0=weights[0], w1=weights[1], w2=weights[2] )
+    np.savez( "weights.npz", w0=weights[0], w1=weights[1], w2=weights[2], w3=weights[3] )
 
     # to load the weights
 
     with np.load( "weights.npz", allow_pickle=True ) as f:
-        weights = [ f["w0"], f["w1"], f["w2"] ]
+        weights = [ f["w0"], f["w1"], f["w2"], f["w3"] ]
 
 if __name__ == "__main__":
     train()
