@@ -36,14 +36,13 @@ vocab_size = len(wordmap)
 x = []
 
 with open( "sentences.txt", 'r' ) as f:
+    i = 0
     for line in f:
+        i += 1
         warns = [ w for w in re.findall(r"[\w']+|[.,!?;]", line) if w not in wordmap ]
-        if warns:
-            print( "warning: words not in vocabulary", warns )
+        # 1 is the index of unknown tokens
         words = [ 0 ] + [
-            wordmap[word]
-            for word in re.findall(r"[\w']+|[.,!?;]", line)
-            if word and word in wordmap and wordmap[word] < vocab_size
+            wordmap.get(word, 1) for word in re.findall(r"[\w']+|[.,!?;]", line)
         ] + [ 0 ]
         x.append(words)
 
@@ -54,14 +53,16 @@ test_data = x[int(len(x) / 10 * 9):]
 
 # hyperparameters
 
-input_size = 31
+# more fixed hyperparamters
+input_size = vocab_size
 embedding_size = 10
 epochs = 1000
 
-a = 0.05
-scale = 0.1
-l2 = 0.00001
-stepl = 10.01
+# more tunable ones
+a = 0.05 # learning rate
+scale = 0.1 # initial weight scale
+l2 = 0.00001 # l2 loss / weight decay
+stepl = 10.01 # use to limit the size of weight updates
 
 # funcs
 
