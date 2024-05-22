@@ -31,7 +31,7 @@ def complete( prompt, weights ):
         sentence.append(word)
         t = onehot( wordmap[word] )
 
-    return " ".join(sentence).replace(" .", ".")
+    return " ".join(sentence).replace(" .", ".").replace(" ?", "?")
 
 # load the weights
 
