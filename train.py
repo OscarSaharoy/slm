@@ -36,13 +36,10 @@ vocab_size = len(wordmap)
 x = []
 
 with open( "sentences.txt", 'r' ) as f:
-    i = 0
     for line in f:
-        i += 1
-        warns = [ w for w in re.findall(r"[\w']+|[.,!?;]", line) if w not in wordmap ]
         # 1 is the index of unknown tokens
         words = [ 0 ] + [
-            wordmap.get(word, 1) for word in re.findall(r"[\w']+|[.,!?;]", line)
+            wordmap.get(word, 1) for word in re.findall(r"[\w']+|[-.,!?;]", line)
         ] + [ 0 ]
         x.append(words)
 
