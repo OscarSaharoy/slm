@@ -54,13 +54,14 @@ test_data = x[int(len(x) / 10 * 9):]
 
 # hyperparameters
 
-input_size = 25
+input_size = 31
 embedding_size = 10
-a = 0.03
-scale = .3
 epochs = 1000
-l2 = 0.000
-stepl = 0.01
+
+a = 0.05
+scale = 0.1
+l2 = 0.00001
+stepl = 10.01
 
 # funcs
 
@@ -82,6 +83,8 @@ def softmax( x ):
     return np.exp(cx) / np.sum(np.exp(cx))
 act = np.tanh
 dact = lambda x : 1 - np.tanh(x*x)
+# act = relu
+# dact = drelu
 
 def limit( x ):
     return (
@@ -104,15 +107,16 @@ def check( t, e_c_prev, weights, tt ):
     return np.argmax( predict( t, e_c_prev, weights )[0] ) == np.argmax( tt )
 
 def test_eval( test_data, weights ):
-    res = 0
+    seen, correct = 0, 0
     for tokens in test_data:
         e_c_prev = np.zeros(embedding_size)
         for i, _ in enumerate( tokens[:-1] ):
             t = onehot( tokens[i] )
             tt = onehot( tokens[i+1] )
             pred, e_c_prev = predict( t, e_c_prev, weights )
-            res += np.argmax( pred ) == np.argmax( tt )
-    return res / sum( len(x) for x in test_data )
+            correct += np.argmax( pred ) == np.argmax( tt )
+            seen += 1
+    return correct / seen
 
 def dldwf( t, e_c_prev, weights, tt ):
     w1, w2, w3 = weights
@@ -171,7 +175,7 @@ def write( weights ):
         sentence.append(word)
         t = onehot( wordmap[word] )
 
-    print(" ".join(sentence).replace(" .", "."))
+    print( " ".join(sentence).replace(" .", ".").replace(" ?", "?") )
 
 # init network
 
@@ -183,6 +187,8 @@ def train():
     w0 *= scale
     w1 *= scale
     w2 *= scale
+    w1[:, :embedding_size] += np.eye(embedding_size)
+    w1[:, embedding_size:] += np.eye(embedding_size)
     weights = [ w0, w1, w2 ]
 
     print( sum(w.size for w in weights), "parameters" )

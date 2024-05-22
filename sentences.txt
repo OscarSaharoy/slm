@@ -1,120 +1,81 @@
-i love my dog because it is nice and happy.
-a big dog is who i love.
-the dog is nice and happy.
-i love the dog and it is big.
-my dog is big and nice.
-the dog was nice and happy.
-i am happy because my dog is nice.
-a nice dog is who i love.
-my dog is big and it is nice.
-the dog was nice and it is big.
-i love my dog and it is happy.
-a nice dog is who i am happy because.
-the dog is nice and i love it.
-my dog is big and happy and nice.
-i love the dog because it is nice.
-a big and nice dog is my dog.
-the dog is happy and it is nice.
-my dog was nice and it is big.
-i am happy because the dog is nice.
-a dog is nice and i love it.
-the dog is big and nice and happy.
-my dog is nice and it was happy.
-i love my dog and it is big.
-a nice dog is who i love it.
-the dog is big and it is nice.
-my dog is happy and it was nice.
-i am happy because my dog was nice.
-a nice and happy dog is my dog.
-the dog is nice and it is big.
-my dog is nice and i love it.
-the cat is not nice and i am not happy.
-a small cat is who i do not love.
-the cat is not nice and it is small.
-i do not love the cat and it is small.
-my cat is small and not nice.
-the cat was not nice and not happy.
-i am not happy because my cat is not nice.
-a not nice cat is who i do not love.
-my cat is small and it is not nice.
-the cat was not nice and it is small.
-i do not love my cat and it is not happy.
-a not nice cat is who i am not happy because.
-the cat is not nice and i do not love it.
-my cat is small and not happy and not nice.
-i do not love the cat because it is not nice.
-a small and not nice cat is my cat.
-the cat is not happy and it is not nice.
-my cat was not nice and it is small.
-i am not happy because the cat is not nice.
-a cat is not nice and i do not love it.
-the cat is small and not nice and not happy.
-my cat is not nice and it was not happy.
-i do not love my cat and it is small.
-a not nice cat is who i do not love it.
-the cat is small and it is not nice.
-my cat is not happy and it was not nice.
-i am not happy because my cat was not nice.
-a not nice and not happy cat is my cat.
-the cat is not nice and it is small.
-my cat is not nice and i do not love it.
-i love the dog because it is happy.
-a nice dog is who i am happy.
-the dog is nice and it is happy.
-my dog is happy and i love it.
-i love my dog and it was nice.
-a big and happy dog is my dog.
-the dog is big and it was nice.
-my dog was big and it is nice.
-i am happy because the dog was nice.
-a dog is nice and happy and i love it.
-the cat is small and it was not nice.
-my cat was not nice and i do not love it.
-i am not happy because my cat is small.
-a small cat is who i do not love it.
-the cat is not nice and not happy and small.
-my cat is small and not nice and not happy.
-i do not love the cat and it was not nice.
-a not nice and small cat is my cat.
-the cat is not nice and it is small and not happy.
-my cat is not happy and it is not nice.
-i love the dog because it is nice and big.
-a nice and big dog is who i love.
-the dog is nice and big and happy.
-my dog is big and nice and it is happy.
-i love my dog and it is nice and big.
-a big dog is nice and i love it.
-the dog was big and nice and happy.
-my dog was nice and big and it is happy.
-i am happy because the dog is big and nice.
-a dog that is big and nice is who i love.
-the cat is small and not nice and not happy.
-my cat is not nice and not happy and it is small.
-i am not happy because my cat is small and not nice.
-a small cat that is not nice is who i do not love.
-the cat is not nice and it is small and not happy.
-my cat is small and it is not nice and not happy.
-i do not love the cat because it is not nice and small.
-a cat that is not nice and small is my cat.
-the cat is not happy and not nice and it is small.
-my cat is not nice and it is small and not happy.
-i love the nice and happy dog.
-a dog that is nice and happy is who i love.
-the dog is nice and happy and i love it.
-my dog is nice and happy and i love it.
-i love my dog because it is nice and happy.
-a happy and nice dog is my dog.
-the dog is nice and happy and i love it.
-my dog was nice and happy and it is big.
-i am happy because my dog is nice and happy.
-a dog that is nice and happy is who i love.
-the cat is not nice and not happy.
-my cat is not nice and it is not happy.
-i am not happy because the cat is not nice.
-a cat that is not nice is who i do not love.
-the cat is not nice and not happy and i do not love it.
-my cat is not nice and it is not happy and small.
-i do not love the cat because it is not nice and not happy.
-a cat that is not nice and not happy is my cat.
-the cat is small and not nice and not happy.
-my cat is not happy and not nice and it is small.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+how are you? i am ok.
+how are you? i am good.
+how are you? not good.
+how are you? i am bad.
+how are you? i am fine.
+who are you? boris
+what are you? boris.
+who is good? boris.
+
