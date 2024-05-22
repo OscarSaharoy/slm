@@ -56,11 +56,11 @@ test_data = x[int(len(x) / 10 * 9):]
 
 input_size = 25
 embedding_size = 10
-a = 0.05
-scale = .2
+a = 0.03
+scale = .3
 epochs = 1000
 l2 = 0.000
-stepl = 0.001
+stepl = 0.01
 
 # funcs
 
@@ -190,8 +190,8 @@ def train():
     # training loop
 
     try:
+        m = np.array([ 0, 0, 0 ])
         for epoch in range(epochs):
-            m = 0
             for tokens in training_data:
                 state_stack = []
                 e_c_prev = np.zeros(embedding_size)
@@ -204,7 +204,9 @@ def train():
                     weights[0] -= a * dw0
                     weights[1] -= a * dw1
                     weights[2] -= a * dw2
-                    m = max( m, *(np.linalg.norm(x) for x in (dw0, dw1, dw2)) )
+
+                    steps = np.array( [ np.linalg.norm(x) for x in (dw0, dw1, dw2) ] )
+                    m = np.amax( np.stack(( m, steps )), axis=0 )
 
                     for t_p, e_c_prev_p in state_stack[::-1]:
                         dw0, dw1, dw2, _, error_e_c_prev = \
@@ -212,16 +214,23 @@ def train():
                         weights[0] -= a * dw0
                         weights[1] -= a * dw1
                         weights[2] -= a * dw2
-                        m = max( m, *(np.linalg.norm(x) for x in (dw0, dw1, dw2)) )
+
+                        steps = np.array( [ np.linalg.norm(x) for x in (dw0, dw1, dw2) ] )
+                        m = np.amax( np.stack(( m, steps )), axis=0 )
                     state_stack.append(c)
 
-            if epoch % 1 == 0:
+            if epoch % 20 == 0:
                 print(
                     "epoch", epoch,
                     "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
                 )
-                print( "max weight step", m )
-                print( "avg weights", np.mean(weights[0] * weights[0]) ** .5 , "\n")
+                print( "max weight step\n", m )
+                m = np.array([ 0, 0, 0 ])
+                print(
+                    "avg weights\n",
+                    np.array([ np.mean(weights[i] * weights[i]) ** .5 for i in range(3) ]),
+                    "\n"
+                )
 
     except KeyboardInterrupt:
         print("\nending training")
