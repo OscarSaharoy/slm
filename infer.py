@@ -11,9 +11,8 @@ from train import wordmap, mapword, act, softmax, predict, write, onehot
 
 def complete( prompt, weights ):
     words = [ 0 ] + [
-        wordmap[word]
-        for word in re.findall(r"[\w']+|[.,!?;]", prompt)
-        if word and word in wordmap and wordmap[word] < vocab_size
+        wordmap.get(word, 1)
+        for word in re.findall(r"[\w']+|[-.,!?;]", prompt)
     ]
 
     e_c_prev = np.zeros(embedding_size)
