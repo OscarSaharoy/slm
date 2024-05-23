@@ -57,9 +57,9 @@ epochs = 1000
 
 # more tunable ones
 a = 0.05 # learning rate
-scale = 0.1 # initial weight scale
-l2 = 0.00001 # l2 loss / weight decay
-stepl = 10.01 # use to limit the size of weight updates
+scale = 0.2 # initial weight scale
+l2 = 0.0000 # l2 loss / weight decay
+stepl = 0.1 # use to limit the size of weight updates
 
 # funcs
 
