@@ -223,18 +223,17 @@ def train():
                         m = np.amax( np.stack(( m, steps )), axis=0 )
                     state_stack.append(c)
 
-            if epoch % 20 == 0:
-                print(
-                    "epoch", epoch,
-                    "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
-                )
-                print( "max weight step\n", m )
-                m = np.array([ 0, 0, 0 ])
-                print(
-                    "avg weights\n",
-                    np.array([ np.mean(weights[i] * weights[i]) ** .5 for i in range(3) ]),
-                    "\n"
-                )
+            print(
+                "epoch", epoch,
+                "- test accuracy", f"{test_eval( test_data, weights ) * 100:.1f}%"
+            )
+            print( "max weight step\n", m )
+            m = np.array([ 0, 0, 0 ])
+            print(
+                "avg weights\n",
+                np.array([ np.mean(weights[i] * weights[i]) ** .5 for i in range(3) ]),
+                "\n"
+            )
 
     except KeyboardInterrupt:
         print("\nending training")
