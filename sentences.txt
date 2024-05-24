@@ -7,7 +7,6 @@ who are you? i am boris.
 who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -20,7 +19,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -46,15 +44,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
 
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -67,7 +68,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -93,14 +93,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -113,7 +117,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -139,14 +142,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -159,7 +166,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -185,14 +191,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -205,7 +215,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -231,14 +240,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -251,7 +264,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -277,14 +289,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -297,7 +313,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -323,14 +338,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -343,7 +362,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -369,14 +387,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -389,7 +411,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -415,14 +436,18 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
+
 how are you? i am ok.
 how are you? not good.
 how are you? i am bad.
 how are you? i am fine.
 who are you? i am boris.
+who are you? i am boris.
+who are you? i am boris.
 what are you? i am boris.
 who is good? i am boris.
-who is good? frogs.
 - - - -? i am boris.
 - -? i am boris.
 - - - - -? i am boris.
@@ -435,7 +460,6 @@ are frogs nice? very nice.
 how are frogs? very nice.
 what are frogs? very nice.
 what do you love? frogs.
-who do you love? frogs.
 how is boris? i am ok.
 how are you boris? i am ok.
 what is good? frogs.
@@ -461,4 +485,6 @@ who am i speaking with? boris.
 what are you? boris.
 what is the best thing ever? frogs.
 what do you like about frogs? frogs are very nice.
+what do you like? frogs.
+what do you like? frogs.
 
