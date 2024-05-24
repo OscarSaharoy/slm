@@ -59,7 +59,7 @@ epochs = 1000
 a = 0.05 # learning rate
 scale = 0.2 # initial weight scale
 l2 = 0.0000 # l2 loss / weight decay
-stepl = 0.1 # use to limit the size of weight updates
+stepl = 0.02 # use to limit the size of weight updates
 
 # funcs
 
@@ -76,9 +76,9 @@ def sigmoid( x ):
     return 1 / ( 1 + np.exp(-x) )
 def dsigmoid( x ):
     return sigmoid(x) * ( 1 - sigmoid(x) )
-def softmax( x ):
+def softmax( x, T=1 ):
     cx = x - max(x)
-    return np.exp(cx) / np.sum(np.exp(cx))
+    return np.exp(cx/T) / np.sum(np.exp(cx/T))
 act = np.tanh
 dact = lambda x : 1 - np.tanh(x*x)
 # act = relu
@@ -94,7 +94,7 @@ def predict( t, e_c_prev, weights ):
     w0, w1, w2 = weights
     e_t = act( w0 @ t )
     e_c = act( w1 @ np.concatenate(( e_t, e_c_prev )) )
-    pred = softmax( w2 @ e_c )
+    pred = softmax( w2 @ e_c, T=0.5 )
     return pred, e_c
 
 def loss( t, e_c_prev, weights, tt ):
