@@ -95,7 +95,7 @@ def predict( t, e_c_prev, weights ):
     e_t = act( w0 @ t )
     e_c = act( w1 @ np.concatenate(( e_t, e_c_prev )) )
     pred = softmax( w2 @ e_c, T=0.5 )
-    return pred, e_c
+    return pred, e_t, e_c
 
 def loss( t, e_c_prev, weights, tt ):
     pureloss = predict( t, e_c_prev, weights )[0] - tt
@@ -111,7 +111,7 @@ def test_eval( test_data, weights ):
         for i, _ in enumerate( tokens[:-1] ):
             t = onehot( tokens[i] )
             tt = onehot( tokens[i+1] )
-            pred, e_c_prev = predict( t, e_c_prev, weights )
+            pred, e_t_prev, e_c_prev = predict( t, e_c_prev, weights )
             correct += np.argmax( pred ) == np.argmax( tt )
             seen += 1
     return correct / seen
@@ -168,7 +168,7 @@ def write( weights ):
     t = onehot(0)
 
     while (len(sentence) == 0 or sentence[-1] != "") and len(sentence) < 100:
-        pred, e_c_prev = predict( t, e_c_prev, weights )
+        pred, e_t_prev, e_c_prev = predict( t, e_c_prev, weights )
         word = mapword[ gen.choice(input_size, p=pred) ]
         sentence.append(word)
         t = onehot( wordmap[word] )

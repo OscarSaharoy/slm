@@ -18,14 +18,14 @@ def complete( prompt, weights ):
     e_c_prev = np.zeros(embedding_size)
     for word in words[:-1]:
         t = onehot(word)
-        _, e_c_prev = predict( t, e_c_prev, weights )
+        _, _, e_c_prev = predict( t, e_c_prev, weights )
     t = onehot( words[-1] )
 
     gen = np.random.default_rng()
     sentence = []
 
     while (len(sentence) == 0 or sentence[-1] != "") and len(sentence) < 100:
-        pred, e_c_prev = predict( t, e_c_prev, weights )
+        pred, e_t_prev, e_c_prev = predict( t, e_c_prev, weights )
         word = mapword[ gen.choice(input_size, p=pred) ]
         sentence.append(word)
         t = onehot( wordmap[word] )
